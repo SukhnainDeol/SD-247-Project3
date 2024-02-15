@@ -1,0 +1,23 @@
+# Ignore build artifacts
+*.o
+*.out
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+
+# Ignore compiled binaries
+bin/
+out/
+build/
+
+# Ignore Visual Studio Code specific files
+.vscode/
+*.code-workspace
+
+# Ignore macOS specific files
+.DS_Store
+
+# Ignore editor backup files
+*~
