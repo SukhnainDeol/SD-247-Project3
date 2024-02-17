@@ -28,6 +28,12 @@ typedef struct
   bool isSunk;
 } Ship;
 
+
+/**
+ * @brief Takes a board of BOARD_SIZE x BOARD_SIZE and fills it with '.'
+ * 
+ * @param board - Board to initialize
+ */
 void initializeBoard(char board[BOARD_SIZE][BOARD_SIZE])
 {
     // set each board value to '.'
@@ -40,6 +46,14 @@ void initializeBoard(char board[BOARD_SIZE][BOARD_SIZE])
     }
 }
 
+
+/**
+ * @brief Prints the board to the user with an outline of row and column
+ * numbers and the decision to hide or show the Ship Locations
+ * 
+ * @param board - board to display
+ * @param showShips - whether to display SHIP_VALUE or to hide from player
+ */
 void displayBoard(char board[BOARD_SIZE][BOARD_SIZE], bool showShips)
 {
     // print row header numbering  
@@ -61,12 +75,13 @@ void displayBoard(char board[BOARD_SIZE][BOARD_SIZE], bool showShips)
     }
 }
 
+
 /**
  * @brief validates whether the given space on a board is ok to place a ship at
  * checking for valid coordinate and already present ships.
  * 
  * @param board - board to check
- * @param start - start coord of ship
+ * @param start - start coord of ship (start coord must be lower number)
  * @param end - end coord of ship
  * @return true - is valid to place ship
  * @return false - is not valid to place ship
@@ -76,16 +91,19 @@ bool isValidPlacement(char board[BOARD_SIZE][BOARD_SIZE], Coordinate start, Coor
     // validate start and end positions
     if (!isValidGuess(board, start) || !isValidGuess(board, end)) { return false;}
 
-    // check for already-present ships
+    // calculate size of ship (distance)
     int xCoord = abs(start.x - end.x);
     int yCoord = abs(start.y - end.y);
     int distance = xCoord + yCoord;
 
-    for (int i = distance; i <= 2*distance; i++)
+    // check each coordinate of ship
+    for (int i = 0; i <= distance; i++)
     {
         char coordValue;
-        if (yCoord == 0) { coordValue = board[i][start.y]; }
-        else if (xCoord == 0) { coordValue = board[start.x][i]; }
+        // if horizontal
+        if (yCoord == 0) { coordValue = board[start.x + i][start.y]; }
+        // if vertical
+        else if (xCoord == 0) { coordValue = board[start.x][start.y + i]; }
         else { return false; }
 
         // check if ship
@@ -93,6 +111,7 @@ bool isValidPlacement(char board[BOARD_SIZE][BOARD_SIZE], Coordinate start, Coor
     }
     return true;
 }
+
 
 /**
  * @brief checks if coordinate on a board has been guessed before
@@ -108,10 +127,20 @@ bool isGuessed(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
     return board[guess.x][guess.y] == HIT_VALUE || board[guess.x][guess.y] == MISS_VALUE;
 }
 
+
+/**
+ * @brief 
+ * 
+ * @param board 
+ * @param ship 
+ * @return true 
+ * @return false 
+ */
 bool isSunk(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
 {
     // check if the ship is sunk
 }
+
 
 /**
  * @brief Checks a given coordinate on a board to see if value 
@@ -135,6 +164,13 @@ bool isValidGuess(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
     return true;
 }
 
+
+/**
+ * @brief 
+ * 
+ * @param board 
+ * @param ship 
+ */
 void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
 {
     // get random coordinates
@@ -142,15 +178,33 @@ void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
     // repeat until placed
 }
 
+
+/**
+ * @brief 
+ * 
+ * @param board 
+ * @param ships 
+ * @param isUserTurn 
+ */
 void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool isUserTurn)
 {
     // logic for a turn (user or computer)
 }
 
+
+/**
+ * @brief 
+ * 
+ * @param ships 
+ * @return true 
+ * @return false 
+ */
 bool isGameOver(Ship ships[NUM_SHIPS])
 {
     // is the game over?
 }
+
+
 
 int main()
 {
@@ -159,6 +213,9 @@ int main()
     char computerBoard[BOARD_SIZE][BOARD_SIZE];
     initializeBoard(playerBoard);
     initializeBoard(computerBoard);
+
+    // makes ships arr for each team
+    // place each ship in arr
 
     displayBoard(playerBoard, true);
 
