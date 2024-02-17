@@ -4,6 +4,14 @@
 #include <time.h>
 #include <string.h>
 
+// TODO
+    // finish writing functions
+    // write main logic
+        // integration testing of functions
+    // consider creating seperate header file
+    // README.md
+    // free memory?
+
 #define SHIP_VALUE 'S'
 #define HIT_VALUE 'H'
 #define MISS_VALUE 'O'
@@ -27,6 +35,42 @@ typedef struct
   int length;
   bool isSunk;
 } Ship;
+
+
+/**
+ * @brief checks if coordinate on a board has been guessed before
+ * by checking if it was a hit or miss.
+ * 
+ * @param board - board to be checked
+ * @param guess - guess coordinates
+ * @return true - coord has not been guessed
+ * @return false - coord has been guessed
+ */
+bool isGuessed(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
+{
+    return board[guess.x][guess.y] == HIT_VALUE || board[guess.x][guess.y] == MISS_VALUE;
+}
+
+
+/**
+ * @brief Checks a given coordinate on a board to see if value 
+ * can be guess by players. Meaning it hasn't been guessed and is
+ * in the board's range.
+ * 
+ * @param board - board to check guess on
+ * @param guess - x,y coordinate of guess
+ * @return true - guessable coordinate
+ * @return false - value has been guessed or out of range
+ */
+bool isValidGuess(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
+{
+    // guess coords are 0 - 10 and haven't been guessed
+    if (!(guess.x < BOARD_SIZE && guess.x >= 0 && guess.y < BOARD_SIZE && guess.y >= 0) || isGuessed(board, guess)) 
+    { 
+        return false;
+    }
+    return true;
+}
 
 
 /**
@@ -114,68 +158,71 @@ bool isValidPlacement(char board[BOARD_SIZE][BOARD_SIZE], Coordinate start, Coor
 
 
 /**
- * @brief checks if coordinate on a board has been guessed before
- * by checking if it was a hit or miss.
+ * @brief Checks the segments of a ship on a board to see if it is sunk
  * 
- * @param board - board to be checked
- * @param guess - guess coordinates
- * @return true - coord has not been guessed
- * @return false - coord has been guessed
- */
-bool isGuessed(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
-{
-    return board[guess.x][guess.y] == HIT_VALUE || board[guess.x][guess.y] == MISS_VALUE;
-}
-
-
-/**
- * @brief 
- * 
- * @param board 
- * @param ship 
- * @return true 
- * @return false 
+ * @param board - board of ship to check
+ * @param ship - ship struct to check if sunk
+ * @return true - all ship segments are sunk
+ * @return false - not all ship segments are sunk
  */
 bool isSunk(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
 {
-    // check if the ship is sunk
-}
+    int sunkCount = 0;
+    for (int i = 0; i < ship.length; i++)
+    {
+        char coordValue;
+        if (ship.start.x == ship.end.x) { coordValue = board[ship.start.x][ship.start.y + 1]; }
+        else if (ship.start.y == ship.end.y) { coordValue = board[ship.start.x + 1 ][ship.start.y]; }
 
-
-/**
- * @brief Checks a given coordinate on a board to see if value 
- * can be guess by players. Meaning it hasn't been guessed and is
- * in the board's range.
- * 
- * @param board - board to check guess on
- * @param guess - x,y coordinate of guess
- * @return true - guessable coordinate
- * @return false - value has been guessed or out of range
- */
-bool isValidGuess(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
-{
-    // guess coords are 0 - 10 and haven't been guessed
-    if (!(guess.x < BOARD_SIZE && guess.x >= 0 &&
-     guess.y < BOARD_SIZE && guess.y >= 0) ||
-     isGuessed(board, guess)) 
-    { 
-        return false;
+        if (coordValue == HIT_VALUE) { sunkCount++; }
     }
-    return true;
+
+    if (sunkCount == ship.length) { return true; }
+    return false;
 }
 
 
 /**
- * @brief 
+ * @brief place a ship randomly on a board, validating to make sure
+ * there are no ship collisions or the ship going off board
  * 
- * @param board 
- * @param ship 
+ * @param board - board arr to place on
+ * @param ship - ship struct to place
  */
 void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
 {
-    // get random coordinates
-    // check if valid placement
-    // repeat until placed
+    Coordinate start;
+    Coordinate end;
+
+    srand(time(NULL));
+    int random = rand();
+
+    while (true)
+    {
+        // get random start 
+        start.x = rand() % BOARD_SIZE;
+        start.y = rand() % BOARD_SIZE;
+
+        // use random generator to get 0 or 1 to decide direction
+        int direction = rand() % 2;
+
+        if (direction == 0) // 0 = horizontal
+        {
+            end.x = start.x + ship.length;
+            end.y = start.y;
+        }
+        else // 1 = vertical
+        {
+            end.x = start.x;
+            end.y = start.y + ship.length;
+        }
+        
+        if (isValidPlacement(board, start, end)) { break; }
+    }
+
+    // place ship
+    ship.start = start;
+    ship.end = end;
 }
 
 
@@ -193,15 +240,19 @@ void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool is
 
 
 /**
- * @brief 
+ * @brief if all ships are sunk, game is over
  * 
- * @param ships 
- * @return true 
- * @return false 
+ * @param ships - arr of board's ships structs
+ * @return true - game is over
+ * @return false - game is not over
  */
 bool isGameOver(Ship ships[NUM_SHIPS])
 {
-    // is the game over?
+    for (int i = 0; i < sizeof(ships) / sizeof(ships[0]); i++)
+    {
+        if (!ships[i].isSunk) { return false; }
+    }
+    return true;
 }
 
 
@@ -213,6 +264,10 @@ int main()
     char computerBoard[BOARD_SIZE][BOARD_SIZE];
     initializeBoard(playerBoard);
     initializeBoard(computerBoard);
+
+    Ship playerShips[NUM_SHIPS];
+    Ship computerShips[NUM_SHIPS];
+
 
     // makes ships arr for each team
     // place each ship in arr
@@ -232,9 +287,18 @@ int main()
         // generate computer guess (validate)
 
     // apply guesses
+        // check if ships sunk
         // send players hit, miss, ship sunk message
 
     // when game is over
 
     // announce who won
+
+    while (true) 
+    {
+        // if either players ships are sunk
+        if (isGameOver(playerShips) || isGameOver(computerShips)) { break; }
+    }
+
+    return 0;
 }
