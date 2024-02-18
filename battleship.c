@@ -112,7 +112,7 @@ void displayBoard(char board[BOARD_SIZE][BOARD_SIZE], bool showShips)
         for (int j = 0; j < BOARD_SIZE; j++) 
         { 
             // don't show ships if false
-            if (!showShips && board[i][j] == 'S') { printf('.'); }
+            if (!showShips && board[i][j] == 'S') { putchar('.'); }
             printf("%c ", board[i][j]); 
         }
         printf("\n"); 
@@ -195,7 +195,6 @@ void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
     Coordinate end;
 
     srand(time(NULL));
-    int random = rand();
 
     while (true)
     {
@@ -223,6 +222,21 @@ void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
     // place ship
     ship.start = start;
     ship.end = end;
+    ship.isSunk = false;
+}
+
+
+/**
+ * @brief adds ship lengths to each ship in arr and places ships on board
+ * 
+ * @param board - board to place ships on
+ * @param ships - arr of ships to place
+ */
+void initializeShips(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS])
+{
+    int shipLengths[NUM_SHIPS] = SHIP_LENGTHS;
+    for (int i = 0; i < NUM_SHIPS; i++) { ships[i].length = shipLengths[i]; }
+    for (int i = 0; i < NUM_SHIPS; i++) { placeShip(board, ships[i]); }
 }
 
 
@@ -236,6 +250,21 @@ void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
 void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool isUserTurn)
 {
     // logic for a turn (user or computer)
+    // if user
+        // while loop
+            // ask for guess
+            // validate
+    // if computer
+        // generate coord
+        // validate
+
+    // if hit
+        // check if ship hit is sunk
+            // ship sunk!
+        // else just say u hit
+    // if miss
+        // say miss
+
 }
 
 
@@ -248,7 +277,7 @@ void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool is
  */
 bool isGameOver(Ship ships[NUM_SHIPS])
 {
-    for (int i = 0; i < sizeof(ships) / sizeof(ships[0]); i++)
+    for (int i = 0; i < NUM_SHIPS; i++)
     {
         if (!ships[i].isSunk) { return false; }
     }
@@ -259,7 +288,7 @@ bool isGameOver(Ship ships[NUM_SHIPS])
 
 int main()
 {
-    // initalize boards
+    // initialize ships & boards
     char playerBoard[BOARD_SIZE][BOARD_SIZE];
     char computerBoard[BOARD_SIZE][BOARD_SIZE];
     initializeBoard(playerBoard);
@@ -267,6 +296,8 @@ int main()
 
     Ship playerShips[NUM_SHIPS];
     Ship computerShips[NUM_SHIPS];
+    initializeShips(playerBoard, playerShips);
+    initializeShips(computerBoard, computerShips);
 
 
     // makes ships arr for each team
