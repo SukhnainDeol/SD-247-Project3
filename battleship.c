@@ -5,16 +5,19 @@
 #include <string.h>
 
 // TODO
-    // write main logic
-        // integration testing of functions
     // consider creating seperate header file
+        // and split up functions more
     // README.md
     // free memory?
     // remove extra printfs
     // problems
         // computer turn not working
-                    // some error in updatingSunk
+             // some error in updatingSunk when i = NUM_SHIPS - 1
         // error check on input resulting in infinite loop
+        // error in input resulting in ERROR OUT OF BOARD RANGE at program execution
+    // switch x and y in code cuz reversed axis
+    // specify player/computer in hit/miss notification
+
 
 #define EMPTY_VALUE '.'
 #define SHIP_VALUE 'S'
@@ -53,7 +56,7 @@ typedef struct
  */
 bool isGuessed(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
 {
-    return board[guess.x][guess.y] == HIT_VALUE || board[guess.x][guess.y] == MISS_VALUE;
+    return board[guess.y][guess.x] == HIT_VALUE || board[guess.y][guess.x] == MISS_VALUE;
 }
 
 
@@ -188,8 +191,9 @@ bool isSunk(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
     for (int i = 0; i < ship.length; i++)
     {
         char coordValue;
-        if (ship.start.x == ship.end.x) { coordValue = board[ship.start.x][ship.start.y + 1]; }
-        else if (ship.start.y == ship.end.y) { coordValue = board[ship.start.x + 1 ][ship.start.y]; }
+        // increments coordinates based on if ship is horizontal or vertical (x or y is same)
+        if (ship.start.x == ship.end.x) { coordValue = board[ship.start.x][ship.start.y + i]; }
+        else if (ship.start.y == ship.end.y) { coordValue = board[ship.start.x + i][ship.start.y]; }
 
         if (coordValue == HIT_VALUE) { sunkCount++; }
     }
@@ -210,10 +214,9 @@ void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
 {
     Coordinate start;
     Coordinate end;
+    int direction;
 
     srand(time(NULL));
-
-    int direction;
 
     while (true)
     {
@@ -284,13 +287,13 @@ char guess(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
 {
     if (!isValidGuess(board, guess)) { return -1; }
 
-    switch (board[guess.x][guess.y])
+    switch (board[guess.y][guess.x])
     {
         case EMPTY_VALUE:
-            board[guess.x][guess.y] = MISS_VALUE;
+            board[guess.y][guess.x] = MISS_VALUE;
             return MISS_VALUE;
         case SHIP_VALUE:
-            board[guess.x][guess.y] = HIT_VALUE;
+            board[guess.y][guess.x] = HIT_VALUE;
             return HIT_VALUE;
         default:
             return 0;
@@ -309,7 +312,7 @@ char guess(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
 int updateShipsSunk(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS])
 {
     int newShipsSunk = 0;
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < NUM_SHIPS-1; i++)
     {
         if (isSunk(board, ships[i]) && !ships[i].isSunk) 
         {
@@ -317,7 +320,6 @@ int updateShipsSunk(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS])
             newShipsSunk++;
         }
     }
-
     return newShipsSunk;
 }
 
@@ -344,6 +346,7 @@ void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool is
             
             if (isValidGuess(board, guessCoord)) { break; }
         }
+        printf("\nPlayer "); // specify side in hit/miss notification below
     }
 
     // generate computer coordinates
@@ -357,22 +360,17 @@ void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool is
 
             if (isValidGuess(board, guessCoord)) { break; }
         }
+        printf("Computer "); // specify side in hit/miss notification below
     }
-    printf("OUT TEST 1");
-
         
     // apply guess and check for new ships sunk
     char coordValue = guess(board, guessCoord);
-        printf("OUT TEST 2");
-
     int newShipSunk = updateShipsSunk(board, ships);
-    printf("OUT TEST 3");
 
     // announce result
-    if (coordValue == HIT_VALUE && newShipSunk) { printf("Ship Sunk!\n"); }
-    else if (coordValue == HIT_VALUE) { printf("Hit!\n"); }
-    else if (coordValue == MISS_VALUE) { printf("Miss!\n"); }
-    printf("OUT TEST 5");
+    if (coordValue == HIT_VALUE && newShipSunk) { printf("Sunk a Ship!\n"); }
+    else if (coordValue == HIT_VALUE) { printf("Hit a Ship!\n"); }
+    else if (coordValue == MISS_VALUE) { printf("Missed!\n"); }
 
     return;
 }
@@ -409,19 +407,25 @@ int main()
     initializeShips(playerBoard, playerShips);
     initializeShips(computerBoard, computerShips);
 
+    int round = 1;
+
     while (true) // game loop start
     {
+        printf("ROUND %d\n\n", round);
+
         printf("Your Board: \n");
         displayBoard(playerBoard, true);
 
         printf("Enemy Board: \n");
         displayBoard(computerBoard, false);
 
-        // get guesses & validate
-        takeTurn(playerBoard, playerShips, true);
-        printf("yo");
-        takeTurn(computerBoard, computerShips, false);
-        printf("yo");
+        // player & computer turns
+        printf("\n");
+        takeTurn(computerBoard, computerShips, true);
+        takeTurn(playerBoard, playerShips, false);
+        printf("\n");
+
+        round++;
 
         if (isGameOver(playerShips)) 
         { 
