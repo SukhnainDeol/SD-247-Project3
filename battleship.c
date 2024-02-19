@@ -4,6 +4,8 @@
 #include <time.h>
 #include <string.h>
 
+#include "include/board_macros.h"
+
 // TODO
     // consider creating seperate header file
         // and split up functions more
@@ -18,17 +20,6 @@
     // switch x and y in code cuz reversed axis
     // specify player/computer in hit/miss notification
 
-
-#define EMPTY_VALUE '.'
-#define SHIP_VALUE 'S'
-#define HIT_VALUE 'H'
-#define MISS_VALUE 'O'
-#define BOARD_SIZE 10
-#define NUM_SHIPS 5
-#define SHIP_LENGTHS \
-  {                  \
-    5, 4, 3, 3, 2    \
-  }
 
 typedef struct
 {
