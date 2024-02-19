@@ -4,7 +4,9 @@
 #include <time.h>
 #include <string.h>
 
+// project header includes 
 #include "include/board_macros.h"
+#include "include/board_structs.h"
 
 // TODO
     // consider creating seperate header file
@@ -13,27 +15,15 @@
     // free memory?
     // remove extra printfs
     // problems
-        // computer turn not working
+        // computer turn not working (likely fixed)
              // some error in updatingSunk when i = NUM_SHIPS - 1
-        // error check on input resulting in infinite loop
-        // error in input resulting in ERROR OUT OF BOARD RANGE at program execution
+        // test inputs
+        // compile warnings
+        // boards are the same
+        // ships aren't being updated (use pointers & free)
     // switch x and y in code cuz reversed axis
-    // specify player/computer in hit/miss notification
 
 
-typedef struct
-{
-  int x;
-  int y;
-} Coordinate;
-
-typedef struct
-{
-  Coordinate start;
-  Coordinate end;
-  int length;
-  bool isSunk;
-} Ship;
 
 
 /**
@@ -66,13 +56,11 @@ bool isValidGuess(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
     // guess coords are 0 - 9 
     if (!(guess.x < BOARD_SIZE && guess.x >= 0 && guess.y < BOARD_SIZE && guess.y >= 0)) 
     { 
-        printf("ERROR: Out of Board Range.\n");
         return false;
     }
     // haven't been guessed
     else if (isGuessed(board, guess))
     {
-        printf("ERROR: Coordinate Already Guessed.\n");
         return false;
     }
     return true;
@@ -176,7 +164,7 @@ bool isValidPlacement(char board[BOARD_SIZE][BOARD_SIZE], Coordinate start, Coor
  * @return true - all ship segments are sunk
  * @return false - not all ship segments are sunk
  */
-bool isSunk(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
+bool hasSank(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
 {
     int sunkCount = 0;
     for (int i = 0; i < ship.length; i++)
@@ -201,7 +189,7 @@ bool isSunk(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
  * @param board - board arr to place on
  * @param ship - ship struct to place
  */
-void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
+void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship *ship)
 {
     Coordinate start;
     Coordinate end;
@@ -220,28 +208,27 @@ void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
 
         if (direction == 0) // 0 = horizontal
         {
-            end.x = start.x + ship.length;
+            end.x = start.x + ship->length;
             end.y = start.y;
         }
         else // 1 = vertical
         {
             end.x = start.x;
-            end.y = start.y + ship.length;
+            end.y = start.y + ship->length;
         }
         
         if (isValidPlacement(board, start, end)) { break; }
     }
 
     // place ship locations in struct
-    ship.start = start;
-    ship.end = end;
-    ship.isSunk = false;
+    ship->start = start;
+    ship->end = end;
 
     // place ships on board
-    for (int i = 0; i < ship.length; i++)
+    for (int i = 0; i < ship->length; i++)
     {
-        int x = ship.start.x;
-        int y = ship.start.y;
+        int x = ship->start.x;
+        int y = ship->start.y;
         // move based on direction of ships
         if (direction == 0) { x += i; }
         else if (direction == 1) { y+= i; }
@@ -260,8 +247,12 @@ void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship ship)
 void initializeShips(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS])
 {
     int shipLengths[NUM_SHIPS] = SHIP_LENGTHS;
-    for (int i = 0; i < NUM_SHIPS; i++) { ships[i].length = shipLengths[i]; }
-    for (int i = 0; i < NUM_SHIPS; i++) { placeShip(board, ships[i]); }
+    for (int i = 0; i < NUM_SHIPS; i++) 
+    { 
+        ships[i].length = shipLengths[i]; 
+        ships[i].isSunk = false;
+    }
+    for (int i = 0; i < NUM_SHIPS; i++) { placeShip(board, &ships[i]); }
 }
 
 
@@ -303,9 +294,9 @@ char guess(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
 int updateShipsSunk(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS])
 {
     int newShipsSunk = 0;
-    for (int i = 0; i < NUM_SHIPS-1; i++)
+    for (int i = 0; i < NUM_SHIPS; i++)
     {
-        if (isSunk(board, ships[i]) && !ships[i].isSunk) 
+        if (hasSank(board, ships[i]) && !ships[i].isSunk) // something wrong here on last loop
         {
             ships[i].isSunk = true;
             newShipsSunk++;
@@ -336,6 +327,9 @@ void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool is
             scanf(" %d", &guessCoord.y);
             
             if (isValidGuess(board, guessCoord)) { break; }
+            printf("ERROR: Invalid Input, Try again.");
+
+            while (getchar() != '\n'); // clear input buffer
         }
         printf("\nPlayer "); // specify side in hit/miss notification below
     }
@@ -383,6 +377,19 @@ bool isGameOver(Ship ships[NUM_SHIPS])
     return true;
 }
 
+void printShips(Ship ships[NUM_SHIPS])
+{
+    for (int i = 0; i < NUM_SHIPS; i++)
+    {
+        printf("len %d \n", ships[i].length);
+        printf("is Sunk =  %d \n", (ships[i].isSunk == false));
+        printf("x1 %d \n", ships[i].start.x);
+        printf("y1 %d \n", ships[i].start.y);
+        printf("x2 %d \n", ships[i].end.x);
+        printf("y2 %d \n\n", ships[i].end.y);
+
+    }
+}
 
 
 int main()
@@ -408,7 +415,7 @@ int main()
         displayBoard(playerBoard, true);
 
         printf("Enemy Board: \n");
-        displayBoard(computerBoard, false);
+        displayBoard(computerBoard, true);
 
         // player & computer turns
         printf("\n");
@@ -418,6 +425,8 @@ int main()
 
         round++;
 
+        printShips(playerShips);
+        printShips(computerShips);
         if (isGameOver(playerShips)) 
         { 
             printf("Computer Won!");

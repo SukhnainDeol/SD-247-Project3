@@ -1,4 +1,4 @@
-#ifndef BOARD_MACROS.H 
+#ifndef BOARD_MACROS.H
 #define BOARD_MACROS.H 
 
 #define EMPTY_VALUE '.'
