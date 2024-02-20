@@ -69,14 +69,15 @@ void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool is
         while (true)
         {
             printf("Enter Guess x-coordinate: ");
-            scanf(" %d", &guessCoord.x);            
+            scanf(" %d", &guessCoord.x);
+            while (getchar() != '\n');
+            
             printf("Enter Guess y-coordinate: ");
             scanf(" %d", &guessCoord.y);
+            while (getchar() != '\n');
             
             if (isValidGuess(board, guessCoord)) { break; }
             printf("ERROR: Invalid Input, Enter a number from 0 - 9.\n");
-
-            while (getchar() != '\n');
         }
         printf("\nPlayer "); // specify side in hit/miss notification below
     }

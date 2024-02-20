@@ -10,7 +10,6 @@
 // TODO
     // README.md
     // free memory?
-    // test inputs
     // Fix that boards are the same
     // switch x and y in code cuz reversed axis
     // file headers?

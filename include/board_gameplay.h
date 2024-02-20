@@ -14,7 +14,7 @@
  * numbers and the decision to hide or show the Ship Locations
  * 
  * @param board - 2d array board to display
- * @param showShips - whether to display SHIP_VALUE or to hide from player
+ * @param showShips - whether to display SHIP_VALUE or to hide when printed
  */
 void displayBoard(char board[BOARD_SIZE][BOARD_SIZE], bool showShips);
 
