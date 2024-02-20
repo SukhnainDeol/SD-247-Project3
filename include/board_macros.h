@@ -1,5 +1,4 @@
-#ifndef BOARD_MACROS.H
-#define BOARD_MACROS.H 
+#pragma once
 
 #define EMPTY_VALUE '.'
 #define SHIP_VALUE 'S'
@@ -11,5 +10,4 @@
   {                  \
     5, 4, 3, 3, 2    \
   }
-
-#endif
+  

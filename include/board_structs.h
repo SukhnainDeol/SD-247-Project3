@@ -1,5 +1,6 @@
-#ifndef BOARD_STRUCTS.H
-#define BOARD_STRUCTS.H 
+#pragma once
+
+#include <stdbool.h>
 
 typedef struct
 {
@@ -14,6 +15,3 @@ typedef struct
   int length;
   bool isSunk;
 } Ship;
-
-
-#endif
