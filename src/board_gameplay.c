@@ -8,13 +8,12 @@ void displayBoard(char board[BOARD_SIZE][BOARD_SIZE], bool showShips)
     for (int i = 0; i < BOARD_SIZE; i++) { printf("%d ", i); }
     printf("\n");
 
-    // print each row 
     for (int i = 0; i < BOARD_SIZE; i++)
     {
         printf("%d ",i); // row numbering
         for (int j = 0; j < BOARD_SIZE; j++) 
         { 
-            // don't show ships if false
+            // don't show ships if showShips == false
             if (!showShips && board[i][j] == 'S') 
             { 
                 putchar(EMPTY_VALUE);
@@ -51,7 +50,7 @@ int updateShipsSunk(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS])
     int newShipsSunk = 0;
     for (int i = 0; i < NUM_SHIPS; i++)
     {
-        if (hasSank(board, ships[i]) && !ships[i].isSunk) // something wrong here on last loop
+        if (hasSank(board, ships[i]) && !ships[i].isSunk)
         {
             ships[i].isSunk = true;
             newShipsSunk++;
@@ -64,7 +63,7 @@ int updateShipsSunk(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS])
 void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool isPlayerTurn)
 {
     Coordinate guessCoord;
-    // get player input coordinates
+
     if (isPlayerTurn)
     {
         while (true)
@@ -75,17 +74,16 @@ void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool is
             scanf(" %d", &guessCoord.y);
             
             if (isValidGuess(board, guessCoord)) { break; }
-            printf("ERROR: Invalid Input, Try again.\n");
+            printf("ERROR: Invalid Input, Enter a number from 0 - 9.\n");
 
-            while (getchar() != '\n'); // clear input buffer
+            while (getchar() != '\n');
         }
         printf("\nPlayer "); // specify side in hit/miss notification below
     }
 
-    // generate computer coordinates
     if (!isPlayerTurn)
     {
-        while (true)
+        while (true) // generate computer coordinates
         {
             srand(time(NULL));
             guessCoord.x = rand() % 10;
@@ -96,11 +94,9 @@ void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool is
         printf("Computer "); // specify side in hit/miss notification below
     }
         
-    // apply guess and check for new ships sunk
     char coordValue = guess(board, guessCoord);
     int newShipSunk = updateShipsSunk(board, ships);
 
-    // announce result
     if (coordValue == HIT_VALUE && newShipSunk) { printf("Sunk a Ship!\n"); }
     else if (coordValue == HIT_VALUE) { printf("Hit a Ship!\n"); }
     else if (coordValue == MISS_VALUE) { printf("Missed!\n"); }

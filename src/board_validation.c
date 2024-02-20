@@ -9,14 +9,8 @@ bool isGuessed(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
 
 bool isValidGuess(char board[BOARD_SIZE][BOARD_SIZE], Coordinate guess)
 {
-    // guess coords are 0 - 9 
-    if (!(guess.x < BOARD_SIZE && guess.x >= 0 && guess.y < BOARD_SIZE && guess.y >= 0)) 
+    if (!(guess.x < BOARD_SIZE && guess.x >= 0 && guess.y < BOARD_SIZE && guess.y >= 0) || isGuessed(board, guess)) 
     { 
-        return false;
-    }
-    // haven't been guessed
-    else if (isGuessed(board, guess))
-    {
         return false;
     }
     return true;

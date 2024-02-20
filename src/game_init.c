@@ -3,7 +3,6 @@
 
 void initializeBoard(char board[BOARD_SIZE][BOARD_SIZE])
 {
-    // set each board value to '.'
     for (int i = 0; i < BOARD_SIZE; i++)
     {
         for (int j = 0; j < BOARD_SIZE; j++)
@@ -24,11 +23,9 @@ void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship *ship)
 
     while (true)
     {
-        // get random start 
         start.x = rand() % BOARD_SIZE;
         start.y = rand() % BOARD_SIZE;
 
-        // use random generator to get 0 or 1 to decide direction
         direction = rand() % 2;
 
         if (direction == 0) // 0 = horizontal
@@ -39,23 +36,23 @@ void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship *ship)
         }
         else // 1 = vertical
         {
-            end.x = start.x; // -1 because .start is first length
+            end.x = start.x;
+             // -1 because .start is first length
             end.y = start.y + ship->length-1; 
         }
         
         if (isValidPlacement(board, start, end)) { break; }
     }
 
-    // place ship locations in struct
     ship->start = start;
     ship->end = end;
 
-    // place ships on board
+    // place ship on board
     for (int i = 0; i < ship->length; i++)
     {
         int x = ship->start.x;
         int y = ship->start.y;
-        // move based on direction of ships
+        // move based on direction of ship
         if (direction == 0) { x += i; }
         else if (direction == 1) { y+= i; }
 
