@@ -1,3 +1,11 @@
+/**
+ * @file board_macros.h
+ * @author Sukhnain Deol 
+ * @date 2024-02-19
+ * @brief This file defines relavent and reoccuring values in a battleship game implemented in the battleship.c
+ */
+
+
 #pragma once
 
 #define EMPTY_VALUE '.'

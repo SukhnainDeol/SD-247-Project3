@@ -1,3 +1,12 @@
+/**
+ * @file board_gameplay.h
+ * @author Sukhnain Deol
+ * @date 2024-02-19
+ * @brief This file declares functions used in battleship.c's gameloop. Giving the functionality to 
+ *        display the battleship boards, take and apply guesses from player & computer.
+ */
+
+
 #pragma once
 
 #include "board_macros.h"

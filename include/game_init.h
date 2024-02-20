@@ -1,3 +1,11 @@
+/**
+ * @file game_init.h
+ * @author Sukhnain Deol ()
+ * @date 2024-02-19
+ * @brief This file provides functions that initalize values in 2d array boards and ship structures from board_structs.h.
+ *        It also uses functions from board_validation to ensure proper initaliztion follwing the rules of the battleship game implemented in battleship.c.
+ */
+
 #pragma once
 
 #include "board_macros.h"

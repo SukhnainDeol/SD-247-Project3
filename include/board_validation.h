@@ -1,3 +1,11 @@
+/**
+ * @file board_validation.h
+ * @author Sukhnain Deol 
+ * @date 2024-02-19
+ * @brief This file provides validation functions for validating data from ships from the board_struct.h file and boards. 
+ *        Both of which are used in the battleship.c file. The file uses functions from the board_gameplay which itself validates gameplay structures and arrays from this file.
+ */
+
 #pragma once
 
 #include "board_macros.h"

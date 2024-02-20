@@ -1,3 +1,11 @@
+/**
+ * @file board_validation.c
+ * @author Sukhnain Deol
+ * @brief This file defines functions declared in board_validation.h, see that file for more info.
+ * @date 2024-02-19
+ */
+
+
 #include "../include/board_validation.h"
 
 

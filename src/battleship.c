@@ -1,3 +1,13 @@
+/**
+ * @file battleship.c
+ * @author Sukhnain Deol 
+ * @date 2024-02-19
+ * @brief The program plays a game of battleship with the user through the console.
+ *        The user and computer's boards are printed and the user can enter the coordinate of their guess.
+ *        The game continues until one side has hit all the ships of the enemy.
+ */
+
+
 #include <stdio.h>
 
 // project header includes 
@@ -13,7 +23,6 @@
     // Fix that boards are the same
     // switch x and y in code cuz reversed axis
     // file headers?
-    // make notifications more visible
 
 int main()
 {

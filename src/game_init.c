@@ -1,3 +1,11 @@
+/**
+ * @file game_init.c
+ * @author Sukhnain Deol
+ * @brief This file defines functions declared in game_init.h, see that file for more info.
+ * @date 2024-02-19
+ */
+
+
 #include "../include/game_init.h"
 
 
