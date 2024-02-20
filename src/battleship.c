@@ -18,9 +18,7 @@
 #include "../include/board_gameplay.h"
 
 // TODO
-    // README.md
-    // free memory?
-    // switch x and y in code cuz reversed axis
+    // ask prof about compilation instructions
 
 int main()
 {
@@ -59,12 +57,12 @@ int main()
         // check for gameover
         if (isGameOver(playerShips)) 
         { 
-            printf("Computer Won!");
+            printf("Computer Won!\n");
             break; 
         }
         else if (isGameOver(computerShips))
         {
-            printf("You Won!");
+            printf("You Won!\n");
             break;
         }
     }

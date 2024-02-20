@@ -85,7 +85,7 @@ void takeTurn(char board[BOARD_SIZE][BOARD_SIZE], Ship ships[NUM_SHIPS], bool is
             while (getchar() != '\n');
             
             if (isValidGuess(board, guessCoord)) { break; }
-            printf("ERROR: Invalid Input, Enter a number from 0 - 9.\n");
+            printf("Invalid Input: Enter a number from 0-9 that has NOT been guessed.\n");
         }
         printf("\nPlayer "); // specify side in hit/miss notification below
     }
