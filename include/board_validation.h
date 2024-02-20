@@ -4,6 +4,7 @@
 #include "board_structs.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 /**

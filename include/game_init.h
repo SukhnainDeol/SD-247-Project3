@@ -5,7 +5,6 @@
 #include "board_validation.h"
 #include <stdbool.h>
 #include <stdlib.h>
-#include <time.h>
 
 /**
  * @brief Takes a board of BOARD_SIZE x BOARD_SIZE and fills it with '.' (EMPTY_VALUE)
