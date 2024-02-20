@@ -27,8 +27,6 @@ void placeShip(char board[BOARD_SIZE][BOARD_SIZE], Ship *ship)
     Coordinate end;
     int direction;
 
-    srand(time(NULL));
-
     while (true)
     {
         start.x = rand() % BOARD_SIZE;

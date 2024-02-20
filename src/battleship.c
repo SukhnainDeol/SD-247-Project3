@@ -9,8 +9,8 @@
 
 
 #include <stdio.h>
-
-// project header includes 
+#include <stdlib.h>
+#include <time.h>
 #include "../include/board_macros.h"
 #include "../include/board_structs.h"
 #include "../include/game_init.h"
@@ -20,12 +20,12 @@
 // TODO
     // README.md
     // free memory?
-    // Fix that boards are the same
     // switch x and y in code cuz reversed axis
-    // file headers?
 
 int main()
 {
+    srand(time(NULL)); // seed random before usage in init functions
+
     // initialize ships & boards
     char playerBoard[BOARD_SIZE][BOARD_SIZE];
     char computerBoard[BOARD_SIZE][BOARD_SIZE];
@@ -46,7 +46,7 @@ int main()
         printf("Your Board: \n");
         displayBoard(playerBoard, true);
         printf("Enemy Board: \n");
-        displayBoard(computerBoard, false);
+        displayBoard(computerBoard, true);
 
         // player & computer turns
         printf("\n");
