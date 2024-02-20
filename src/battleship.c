@@ -17,8 +17,6 @@
 #include "../include/board_validation.h"
 #include "../include/board_gameplay.h"
 
-// TODO
-    // ask prof about compilation instructions
 
 int main()
 {
