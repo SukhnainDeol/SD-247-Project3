@@ -8,7 +8,9 @@ Enter the following into the command line from the project directory (*SukhnainD
 
 To run the program, enter:
 
-` ./battleship `
+` ./battleship ` (for VSCode Terminal)
+
+` battleship ` (for Command Prompt)
 
 # Gameplay
 
