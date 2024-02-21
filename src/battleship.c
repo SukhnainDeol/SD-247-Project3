@@ -42,7 +42,7 @@ int main()
         printf("Your Board: \n");
         displayBoard(playerBoard, true);
         printf("Enemy Board: \n");
-        displayBoard(computerBoard, true);
+        displayBoard(computerBoard, false);
 
         // player & computer turns
         printf("\n");
