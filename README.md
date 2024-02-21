@@ -4,7 +4,7 @@ Enter the following into the command line from the project directory (*SukhnainD
 
 ``` gcc src/battleship.c src/game_init.c src/board_validation.c src/board_gameplay.c -I/include -o battleship ```
 
-Note: you can add `-Wall` after the `gcc` if you would like to see any additional errors. 
+**Note**: you can add `-Wall` after the `gcc` if you would like to see any additional errors. 
 
 To run the program, enter:
 
